@@ -73,6 +73,8 @@
 
 <!-- Pop-up Modal Formulaire d'ajout de tâche -->
 {#if showModal}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="modal-overlay" on:click={closeModal}>
     <div class="modal-content" on:click|stopPropagation>
       <button class="close-button" on:click={closeModal} aria-label="Fermer la modale">✖</button>
