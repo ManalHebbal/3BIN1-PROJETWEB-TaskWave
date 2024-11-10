@@ -1,20 +1,58 @@
+<!-- TaskForm.svelte -->
 <script>
-    import { tasks } from '../stores/taskStore';
-    let title = '';
-    let date = '';
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+
+  let title = "";
+  let date = "";
+  let time = "";
+
+  function handleSubmit() {
+    // Émet un événement avec les détails de la tâche pour le composant parent
+    dispatch("addTask", { title, date, time });
+    // Réinitialise les champs du formulaire après la soumission
+    title = "";
+    date = "";
+    time = "";
+  }
+</script>
+
+<form on:submit|preventDefault={handleSubmit} class="task-form">
+  <label>
+    Titre de la tâche :
+    <input type="text" bind:value={title} required />
+  </label>
   
-    const addTask = () => {
-      tasks.update(currentTasks => [
-        ...currentTasks,
-        { id: Date.now(), title, date }
-      ]);
-      title = '';
-      date = '';
-    };
-  </script>
-  
-  <form on:submit|preventDefault={addTask}>
-    <input type="text" bind:value={title} placeholder="Titre de la tâche" required />
+  <label>
+    Date :
     <input type="date" bind:value={date} required />
-    <button type="submit">Ajouter Tâche</button>
-  </form>
+  </label>
+  
+  <label>
+    Heure (optionnel) :
+    <input type="time" bind:value={time} />
+  </label>
+  
+  <button type="submit">Ajouter la tâche</button>
+</form>
+
+<style>
+  /* Styles pour le formulaire */
+  .task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: 20px auto;
+  }
+  
+  label {
+    font-size: 1rem;
+  }
+  
+  input, button {
+    padding: 5px;
+    font-size: 1rem;
+  }
+</style>
