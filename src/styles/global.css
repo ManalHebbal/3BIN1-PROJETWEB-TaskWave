@@ -4,10 +4,48 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow-x: auto; /* Assure que le calendrier s'adapte à la vue */
 }
 
-/* Bouton pour ajouter une tâche */
+/* Petit carré vert "+" au survol dans le coin inférieur gauche */
+.fc-daygrid-day-frame:hover::after {
+    content: "+";
+    font-size: 1em;
+    color: white;
+    background-color: #28a745; /* Vert pour le bouton */
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    cursor: pointer;
+    z-index: 10;
+    font-weight: bold;
+    border-radius: 4px; /* Carré avec coins légèrement arrondis */
+    pointer-events: none; /* Pour ne pas interférer avec le clic */
+}
+
+/* Styles pour les événements (tâches) du calendrier */
+.fc-daygrid-event {
+    background-color: #ff7f00;  /* Fond orange */
+    color: white;  /* Texte blanc */
+    border: 2px solid #e67e22;  /* Contour orange plus foncé */
+    padding: 2px 8px;  /* Ajustement de l'espacement */
+    border-radius: 4px;  /* Coins arrondis */
+    font-size: 0.9em;  /* Taille du texte */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Espace entre l'icône et le texte */
+}
+
+/* Styles pour le bouton "Ajouter une tâche" dans TaskForm */
 .add-task-button {
     background-color: #ffa500;
     color: white;
@@ -55,17 +93,20 @@
     cursor: pointer;
 }
 
-/* Styles pour les événements (tâches) du calendrier */
-.fc-daygrid-event {
-    background-color: #ff7f00;  /* Fond orange */
-    color: white;  /* Texte blanc */
-    border: 2px solid #e67e22;  /* Contour orange plus foncé */
-    padding: 2px 8px;  /* Ajustement de l'espacement */
-    border-radius: 4px;  /* Coins arrondis */
-    font-size: 0.9em;  /* Taille du texte */
-    font-weight: bold;
+/* Styles pour le formulaire de tâche */
+.task-form {
     display: flex;
-    align-items: center;
-    gap: 4px; /* Espace entre l'icône et le texte */
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: 20px auto;
 }
-
+  
+.task-form label {
+    font-size: 1rem;
+}
+  
+.task-form input, .task-form button {
+    padding: 5px;
+    font-size: 1rem;
+}

@@ -1,19 +1,19 @@
-<!-- TaskForm.svelte -->
 <script>
   import { createEventDispatcher } from "svelte";
+  import '../styles/global.css';
+
+  export let selectedDate = ""; // Reçoit la date sélectionnée du composant parent
 
   const dispatch = createEventDispatcher();
 
   let title = "";
-  let date = "";
+  let date = selectedDate || ""; // Utilise selectedDate pour pré-remplir le champ
   let time = "";
 
   function handleSubmit() {
-    // Émet un événement avec les détails de la tâche pour le composant parent
     dispatch("addTask", { title, date, time });
-    // Réinitialise les champs du formulaire après la soumission
     title = "";
-    date = "";
+    date = selectedDate || "";
     time = "";
   }
 </script>
@@ -36,23 +36,3 @@
   
   <button type="submit">Ajouter la tâche</button>
 </form>
-
-<style>
-  /* Styles pour le formulaire */
-  .task-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 300px;
-    margin: 20px auto;
-  }
-  
-  label {
-    font-size: 1rem;
-  }
-  
-  input, button {
-    padding: 5px;
-    font-size: 1rem;
-  }
-</style>

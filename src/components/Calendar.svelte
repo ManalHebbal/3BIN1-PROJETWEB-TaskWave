@@ -10,9 +10,10 @@
   let calendarEl;
   let calendar;
   let showModal = false;
+  let selectedDate = null;
   let events = []; // Initialisé vide par défaut
 
-  // Fonction pour charger les événements depuis localStorage (uniquement côté client)
+  // Fonction pour charger les événements depuis localStorage
   function loadEvents() {
     const savedEvents = localStorage.getItem("calendarEvents");
     return savedEvents ? JSON.parse(savedEvents) : [];
@@ -38,12 +39,14 @@
     closeModal();
   }
 
-  function openModal() {
+  function openModal(date) {
+    selectedDate = date;
     showModal = true;
   }
 
   function closeModal() {
     showModal = false;
+    selectedDate = null;
   }
 
   onMount(() => {
@@ -59,19 +62,21 @@
         left: "prev,next today",
         center: "title",
         right: ""
+      },
+      dateClick: function(info) {
+        openModal(info.dateStr); // Ouvre le modal avec la date sélectionnée
       }
     });
     calendar.render();
   });
 </script>
 
-<button on:click={openModal} class="add-task-button">Ajouter une tâche</button>
-
+<!-- Pop-up Modal Formulaire d'ajout de tâche -->
 {#if showModal}
   <div class="modal-overlay" on:click={closeModal}>
     <div class="modal-content" on:click|stopPropagation>
       <button class="close-button" on:click={closeModal} aria-label="Fermer la modale">✖</button>
-      <TaskForm on:addTask={handleAddTask} />
+      <TaskForm on:addTask={handleAddTask} {selectedDate} />
     </div>
   </div>
 {/if}
