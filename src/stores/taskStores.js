@@ -1,25 +1,14 @@
 import { writable } from 'svelte/store';
 
-function isLocalStorageAvailable() {
-    try {
-        const testKey = '__test__';
-        localStorage.setItem(testKey, testKey);
-        localStorage.removeItem(testKey);
-        return true;
-    } catch {
-        return false;
-    }
-}
-
 function createTaskStore() {
-    const storedTasks = isLocalStorageAvailable() 
-        ? JSON.parse(localStorage.getItem('calendarEvents')) || []
+    const storedTasks = (typeof localStorage !== 'undefined' && localStorage.getItem('calendarEvents'))
+        ? JSON.parse(localStorage.getItem('calendarEvents'))
         : [];
 
     const { subscribe, update } = writable(storedTasks);
 
     function saveTasks(tasks) {
-        if (isLocalStorageAvailable()) {
+        if (typeof localStorage !== 'undefined') {
             localStorage.setItem('calendarEvents', JSON.stringify(tasks));
         }
     }
@@ -28,7 +17,7 @@ function createTaskStore() {
         subscribe,
         addTask: (task) => update(tasks => {
             const newTasks = [...tasks, task];
-            saveTasks(newTasks);  
+            saveTasks(newTasks); 
             return newTasks;
         }),
         updateTask: (updatedTask) => update(tasks => {
@@ -38,7 +27,7 @@ function createTaskStore() {
         }),
         deleteTask: (taskId) => update(tasks => {
             const newTasks = tasks.filter(task => task.id !== taskId);
-            saveTasks(newTasks);  
+            saveTasks(newTasks); 
             return newTasks;
         })
     };
