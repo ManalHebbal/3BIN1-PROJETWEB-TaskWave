@@ -2,10 +2,10 @@
   import { taskStore } from '../stores/taskStores';
   import '../styles/global.css';
 
-  export let selectedDate = ""; // Reçoit la date sélectionnée du composant parent
-  export let task = null; // Reçoit la tâche à modifier, si présente
+  export let selectedDate = ""; 
+  export let task = null; 
 
-  // Initialisation des champs de formulaire avec les valeurs de la tâche, le cas échéant
+
   let title = task ? task.title : "";
   let date = task ? task.start.split("T")[0] : selectedDate || "";
   let time = task && task.start.includes("T") ? task.start.split("T")[1] : "";
@@ -18,14 +18,12 @@
     };
 
     if (task) {
-      // Mode édition - mettre à jour la tâche
       taskStore.updateTask(taskData);
     } else {
       // Ajout d'une nouvelle tâche
       taskStore.addTask(taskData);
     }
 
-    // Réinitialisation des champs du formulaire après ajout ou mise à jour
     title = "";
     date = selectedDate || "";
     time = "";
