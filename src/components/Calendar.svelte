@@ -4,83 +4,122 @@
   import dayGridPlugin from "@fullcalendar/daygrid";
   import interactionPlugin from "@fullcalendar/interaction";
   import TaskForm from "./TaskForm.svelte";
-  import '../styles/global.css';
-
+  import { taskStore } from '../stores/taskStores';
+  import { get } from 'svelte/store';
 
   let calendarEl;
   let calendar;
   let showModal = false;
   let selectedDate = null;
-  let events = []; // Initialisé vide par défaut
+  let editingTask = null;
 
-  // Fonction pour charger les événements depuis localStorage
-  function loadEvents() {
-    const savedEvents = localStorage.getItem("calendarEvents");
-    return savedEvents ? JSON.parse(savedEvents) : [];
-  }
-
-  function saveEvents() {
-    localStorage.setItem("calendarEvents", JSON.stringify(events));
-  }
-
-  function addEventToCalendar(event) {
-    calendar.addEvent(event);
-  }
-
-  function handleAddTask(event) {
-    const { title, date, time } = event.detail;
-    const eventData = {
-      title,
-      start: time ? `${date}T${time}` : date,
-    };
-    events = [...events, eventData];
-    addEventToCalendar(eventData);
-    saveEvents(); // Sauvegarde des événements dans localStorage
-    closeModal();
-  }
-
-  function openModal(date) {
+  function openModal(date, task = null) {
     selectedDate = date;
+    editingTask = task;
     showModal = true;
   }
 
   function closeModal() {
     showModal = false;
     selectedDate = null;
+    editingTask = null;
+  }
+
+  function handleEditTask(event) {
+    const taskToEdit = get(taskStore).find(task => task.id === event.id);
+    if (taskToEdit) {
+      openModal(taskToEdit.start.split("T")[0], taskToEdit);
+    }
+  }
+
+  function handleDeleteTask(event) {
+    taskStore.deleteTask(event.id);
+    const calendarEvent = calendar.getEventById(event.id);
+    if (calendarEvent) {
+      calendarEvent.remove();
+    }
+  }
+
+  function addEventToCalendar(task) {
+    calendar.addEvent({
+      id: task.id,
+      title: task.title,
+      start: task.start,
+    });
   }
 
   onMount(() => {
-    // Charger les événements depuis localStorage seulement côté client
-    events = loadEvents();
+    if (calendarEl) {
+      calendar = new Calendar(calendarEl, {
+        plugins: [dayGridPlugin, interactionPlugin],
+        initialView: "dayGridMonth",
+        headerToolbar: {
+          left: "prev,next today",
+          center: "title",
+          right: ""
+        },
+        dateClick: function(info) {
+          openModal(info.dateStr);
+        },
+        eventContent: function(arg) {
+          const titleEl = document.createElement('div');
+          titleEl.innerText = arg.event.title;
 
-    // Initialiser FullCalendar avec les événements
-    calendar = new Calendar(calendarEl, {
-      plugins: [dayGridPlugin, interactionPlugin],
-      initialView: "dayGridMonth",
-      events: events,
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: ""
-      },
-      dateClick: function(info) {
-        openModal(info.dateStr); // Ouvre le modal avec la date sélectionnée
-      }
+          
+          const editButton = document.createElement('button');
+          editButton.classList.add('icon-button');
+          editButton.innerHTML = `✏️`;
+          editButton.onclick = (e) => {
+            e.stopPropagation();
+            handleEditTask(arg.event);
+          };
+
+          const deleteButton = document.createElement('button');
+          deleteButton.classList.add('icon-button');
+          deleteButton.innerHTML = `🗑️`;
+          deleteButton.onclick = (e) => {
+            e.stopPropagation();
+            handleDeleteTask(arg.event);
+          };
+
+          const container = document.createElement('div');
+          container.appendChild(titleEl);
+          container.appendChild(editButton);
+          container.appendChild(deleteButton);
+
+          return { domNodes: [container] };
+        }
+      });
+
+      calendar.render();
+    }
+
+    taskStore.subscribe(tasks => {
+      calendar.getEvents().forEach(event => event.remove());
+      tasks.forEach(task => addEventToCalendar(task));
     });
-    calendar.render();
   });
 </script>
 
-<!-- Pop-up Modal Formulaire d'ajout de tâche -->
+<div bind:this={calendarEl} class="calendar-container"></div>
+
 {#if showModal}
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="modal-overlay" on:click={closeModal}>
     <div class="modal-content" on:click|stopPropagation>
       <button class="close-button" on:click={closeModal} aria-label="Fermer la modale">✖</button>
-      <TaskForm on:addTask={handleAddTask} {selectedDate} />
+      <TaskForm {selectedDate} task={editingTask} />
     </div>
   </div>
 {/if}
 
-<div bind:this={calendarEl} class="calendar-container"></div>
+<style>
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+  }
+</style>
