@@ -45,7 +45,21 @@
       id: task.id,
       title: task.title,
       start: task.start,
+      classNames: [getPriorityClass(task.priority)] // Ajout de la classe CSS pour la priorité
     });
+  }
+
+  function getPriorityClass(priority) {
+    switch (priority) {
+      case 'high':
+        return 'priority-high';
+      case 'normal':
+        return 'priority-normal';
+      case 'low':
+        return 'priority-low';
+      default:
+        return '';
+    }
   }
 
   onMount(() => {
@@ -65,7 +79,6 @@
           const titleEl = document.createElement('div');
           titleEl.innerText = arg.event.title;
 
-          
           const editButton = document.createElement('button');
           editButton.classList.add('icon-button');
           editButton.innerHTML = `✏️`;
@@ -111,15 +124,3 @@
     </div>
   </div>
 {/if}
-
-<style>
-  .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 4px;
-    display: inline-flex;
-    align-items: center;
-    font-size: 14px;
-  }
-</style>

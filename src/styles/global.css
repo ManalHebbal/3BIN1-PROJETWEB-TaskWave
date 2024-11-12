@@ -110,3 +110,20 @@
     padding: 5px;
     font-size: 1rem;
 }
+
+/* Styles pour les boutons de priorité */
+.priority-high {
+    background-color: red;
+    color: white;
+  }
+  
+  .priority-normal {
+    background-color: orange;
+    color: black;
+  }
+  
+  .priority-low {
+    background-color: green;
+    color: white;
+  }
+  
