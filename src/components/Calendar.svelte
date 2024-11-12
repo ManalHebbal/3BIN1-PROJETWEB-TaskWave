@@ -12,6 +12,8 @@
   let showModal = false;
   let selectedDate = null;
   let editingTask = null;
+  let showFilterMenu = false;
+  let currentFilter = 'all';
 
   function openModal(date, task = null) {
     selectedDate = date;
@@ -45,7 +47,7 @@
       id: task.id,
       title: task.title,
       start: task.start,
-      classNames: [getPriorityClass(task.priority)] // Ajout de la classe CSS pour la priorité
+      classNames: [getPriorityClass(task.priority)]
     });
   }
 
@@ -60,6 +62,27 @@
       default:
         return '';
     }
+  }
+
+  function toggleFilterMenu() {
+    showFilterMenu = !showFilterMenu;
+  }
+
+  function setFilter(filter) {
+    taskStore.setFilter(filter);
+    showFilterMenu = false;
+    currentFilter = filter;
+    updateCalendar();
+  }
+
+  function updateCalendar() {
+    const filteredTasks = get(taskStore).filter(task => {
+      if (currentFilter === 'all') return true;
+      return task.priority === currentFilter;
+    });
+
+    calendar.getEvents().forEach(event => event.remove());
+    filteredTasks.forEach(task => addEventToCalendar(task));
   }
 
   onMount(() => {
@@ -108,11 +131,22 @@
     }
 
     taskStore.subscribe(tasks => {
-      calendar.getEvents().forEach(event => event.remove());
-      tasks.forEach(task => addEventToCalendar(task));
+      updateCalendar();
     });
   });
 </script>
+
+<div class="filter-buttons">
+  <button on:click={toggleFilterMenu}>Filtrer par priorité</button>
+  {#if showFilterMenu}
+    <div class="filter-options">
+      <button on:click={() => setFilter('high')}>Haute priorité</button>
+      <button on:click={() => setFilter('normal')}>Priorité normale</button>
+      <button on:click={() => setFilter('low')}>Basse priorité</button>
+      <button on:click={() => setFilter('all')}>Tout afficher</button>
+    </div>
+  {/if}
+</div>
 
 <div bind:this={calendarEl} class="calendar-container"></div>
 

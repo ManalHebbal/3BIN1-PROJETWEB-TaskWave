@@ -6,11 +6,16 @@ function createTaskStore() {
         : [];
 
     const { subscribe, update } = writable(storedTasks);
+    const filter = writable('all');
 
     function saveTasks(tasks) {
         if (typeof localStorage !== 'undefined') {
             localStorage.setItem('calendarEvents', JSON.stringify(tasks));
         }
+    }
+
+    function setFilter(newFilter) {
+        filter.set(newFilter);
     }
 
     return {
@@ -29,7 +34,9 @@ function createTaskStore() {
             const newTasks = tasks.filter(task => task.id !== taskId);
             saveTasks(newTasks); 
             return newTasks;
-        })
+        }),
+        setFilter,
+        filter
     };
 }
 
