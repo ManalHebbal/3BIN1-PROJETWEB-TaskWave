@@ -93,7 +93,13 @@
         headerToolbar: {
           left: "prev,next today",
           center: "title",
-          right: ""
+          right: "filterButton" // Bouton personnalisé pour le filtrage
+        },
+        customButtons: {
+          filterButton: {
+            text: "Filtrer par priorité",
+            click: toggleFilterMenu
+          }
         },
         dateClick: function(info) {
           openModal(info.dateStr);
@@ -136,8 +142,11 @@
   });
 </script>
 
-<div class="filter-buttons">
-  <button on:click={toggleFilterMenu}>Filtrer par priorité</button>
+<div class="calendar-container">
+  <!-- Élément du calendrier -->
+  <div bind:this={calendarEl} class="calendar-content"></div>
+
+  <!-- Menu de filtrage des priorités -->
   {#if showFilterMenu}
     <div class="filter-options">
       <button on:click={() => setFilter('high')}>Haute priorité</button>
@@ -148,8 +157,7 @@
   {/if}
 </div>
 
-<div bind:this={calendarEl} class="calendar-container"></div>
-
+<!-- Modale pour ajouter ou modifier les tâches -->
 {#if showModal}
   <div class="modal-overlay" on:click={closeModal}>
     <div class="modal-content" on:click|stopPropagation>
@@ -158,3 +166,66 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .calendar-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .filter-options {
+    position: absolute;
+    top: 60px; /* Ajustez selon la position du bouton */
+    right: px;
+    left: 90%;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-options button {
+    padding: px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    background-color: #e9992a;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+  }
+
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .modal-content{
+    background-color: #d3d3d3;
+    height:auto;
+    width: 40%;
+  }
+</style>

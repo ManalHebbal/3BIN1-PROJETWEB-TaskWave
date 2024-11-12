@@ -33,6 +33,10 @@
 </script>
 
 <form on:submit|preventDefault={handleSubmit} class="task-form">
+  
+  <h1>{task ? "Mettre à jour la tâche" : "Ajouter une tâche"}</h1>
+
+  
   <label>
     Titre de la tâche :
     <input type="text" bind:value={title} required />
@@ -59,3 +63,31 @@
   
   <button type="submit">{task ? "Mettre à jour la tâche" : "Ajouter la tâche"}</button>
 </form>
+
+<style>
+
+  
+ label{
+  font-size: 25px;
+  
+ }
+ label input{
+  border: none;
+ }
+
+ button{
+    background-color: #ffffff;
+    border: none;
+
+ }
+
+ input{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+ }
+</style>
