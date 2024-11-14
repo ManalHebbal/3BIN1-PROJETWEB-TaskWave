@@ -7,6 +7,7 @@
   import { taskStore } from '../stores/taskStores';
   import { get } from 'svelte/store';
 
+
   let calendarEl;
   let calendar;
   let showModal = false;
@@ -105,41 +106,76 @@
           openModal(info.dateStr);
         },
         eventContent: function(arg) {
-          const titleEl = document.createElement('div');
-          titleEl.innerText = arg.event.title;
+    
+            // Création du conteneur principal
+            const container = document.createElement('div');
+            
+            // Insertion de HTML dans le conteneur avec les éléments et classes nécessaires
+            container.innerHTML = `
+              <div class="tasktitle">${arg.event.title}</div>
+              <button class="edit-button">✏️</button>
+              <button class="delete-button">🗑️</button>
+            `
 
-          const editButton = document.createElement('button');
-          editButton.classList.add('icon-button');
-          editButton.innerHTML = `✏️`;
-          editButton.onclick = (e) => {
-            e.stopPropagation();
-            handleEditTask(arg.event);
-          };
+            const editButton = container.querySelector('.edit-button');
+            const deleteButton = container.querySelector('.delete-button');
+            
+            const titleEl= container.querySelector('.tasktitle');
 
-          const deleteButton = document.createElement('button');
-          deleteButton.classList.add('icon-button');
-          deleteButton.innerHTML = `🗑️`;
-          deleteButton.onclick = (e) => {
-            e.stopPropagation();
-            handleDeleteTask(arg.event);
-          };
+            // Application des styles directement en JavaScript
+            titleEl.style.fontFamily = '"Montserrat", sans-serif;'; // Remplacez par la police que vous avez choisie
+            titleEl.style.fontSize = '19px'; // Ajustez la taille
+            titleEl.style.fontWeight = '1'; // Optionnel : définit l
+            
+            
+            
+            editButton.style.marginLeft = '80px';
 
-          const container = document.createElement('div');
-          container.appendChild(titleEl);
-          container.appendChild(editButton);
-          container.appendChild(deleteButton);
+            // Styles appliqués directement en JavaScript pour éviter l'erreur Svelte
+            [editButton, deleteButton].forEach(button => {
+              button.style.background = 'transparent';
+              button.style.border = 'none';
+              button.style.cursor = 'pointer';
+              button.style.fontSize = '16px';
+              button.style.display = 'inline-flex';
 
-          return { domNodes: [container] };
+
+              // Ajouter un effet de survol
+              button.addEventListener('mouseover', () => {
+                button.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                button.style.borderRadius = '50%';
+              });
+
+              button.addEventListener('mouseout', () => {
+                button.style.backgroundColor = 'transparent';
+              });
+            });
+
+
+            // Ajout des événements avec Svelte pour déclencher les fonctions de gestion des tâches
+            editButton.addEventListener('click', (e) => {
+              e.stopPropagation();
+              handleEditTask(arg.event);
+            });
+
+            deleteButton.addEventListener('click', (e) => {
+              e.stopPropagation();
+              handleDeleteTask(arg.event);
+            });
+
+            return { domNodes: [container] };
+          
+
         }
       });
 
-      calendar.render();
-    }
+          calendar.render();
+        }
 
-    taskStore.subscribe(tasks => {
-      updateCalendar();
-    });
-  });
+        taskStore.subscribe(tasks => {
+          updateCalendar();
+        });
+      });
 </script>
 
 <div class="calendar-container">
@@ -228,4 +264,12 @@
     height:auto;
     width: 40%;
   }
+
+  .tasktitle {
+    font-family: 'Roboto Slab', serif; /* Utilisation de la nouvelle police */
+    font-size: 24px; /* Ajustez pour la taille souhaitée */
+    font-weight: 700; /* Pour un style plus épais, si nécessaire */
+    color: #333; /* Changez la couleur si vous le souhaitez */
+  }
+
 </style>

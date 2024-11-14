@@ -78,8 +78,14 @@
  button{
     background-color: #ffffff;
     border: none;
+    border-radius: 10px;
+    cursor: pointer;
 
  }
+
+ button:hover {
+    background-color: #4dff64;
+}
 
  input{
   width: 100%;
