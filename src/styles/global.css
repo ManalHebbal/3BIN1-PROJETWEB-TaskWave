@@ -35,7 +35,7 @@
 .fc-daygrid-event {
     background-color: #ff7f00;  /* Fond orange */
     color: white;  /* Texte blanc */
-    border: 2px solid #e67e22;  /* Contour orange plus foncé */
+    border: 2px solid ;  /* Contour orange plus foncé */
     padding: 2px 8px;  /* Ajustement de l'espacement */
     border-radius: 4px;  /* Coins arrondis */
     font-size: 0.9em;  /* Taille du texte */
@@ -74,14 +74,6 @@
     z-index: 1000;
 }
 
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
 
 .close-button {
     position: absolute;
@@ -94,36 +86,21 @@
 }
 
 /* Styles pour le formulaire de tâche */
-.task-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 500px;
-    margin: 20px auto;
-}
-  
-.task-form label {
-    font-size: 1rem;
-}
-  
-.task-form input, .task-form button {
-    padding: 5px;
-    font-size: 1rem;
-}
+
 
 /* Styles pour les boutons de priorité */
 .priority-high {
-    background-color: red;
+    background-color: rgb(255, 103, 103);
     color: white;
   }
   
   .priority-normal {
-    background-color: orange;
-    color: black;
+    background-color: rgb(255, 204, 109);
+    color: rgb(255, 255, 255);
   }
   
   .priority-low {
-    background-color: green;
+    background-color: rgb(131, 255, 131);
     color: white;
   }
   

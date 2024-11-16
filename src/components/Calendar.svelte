@@ -6,6 +6,7 @@
   import TaskForm from "./TaskForm.svelte";
   import { taskStore } from '../stores/taskStores';
   import { get } from 'svelte/store';
+  import TaskItem from "./TaskItem.svelte";
 
 
   let calendarEl;
@@ -111,8 +112,8 @@
             const container = document.createElement('div');
             
             // Insertion de HTML dans le conteneur avec les éléments et classes nécessaires
-            container.innerHTML = `
-              <div class="tasktitle">${arg.event.title}</div>
+            container.innerHTML = 
+              `<div class="tasktitle">${arg.event.title}</div>
               <button class="edit-button">✏️</button>
               <button class="delete-button">🗑️</button>
             `
@@ -195,10 +196,12 @@
 
 <!-- Modale pour ajouter ou modifier les tâches -->
 {#if showModal}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div class="modal-overlay" on:click={closeModal}>
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="modal-content" on:click|stopPropagation>
       <button class="close-button" on:click={closeModal} aria-label="Fermer la modale">✖</button>
-      <TaskForm {selectedDate} task={editingTask} />
+      <TaskForm {selectedDate} task={editingTask} onClose={closeModal} />
     </div>
   </div>
 {/if}
@@ -235,41 +238,5 @@
     background-color: #e9992a;
   }
 
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-  }
-
-
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  .modal-content{
-    background-color: #d3d3d3;
-    height:auto;
-    width: 40%;
-  }
-
-  .tasktitle {
-    font-family: 'Roboto Slab', serif; /* Utilisation de la nouvelle police */
-    font-size: 24px; /* Ajustez pour la taille souhaitée */
-    font-weight: 700; /* Pour un style plus épais, si nécessaire */
-    color: #333; /* Changez la couleur si vous le souhaitez */
-  }
 
 </style>
