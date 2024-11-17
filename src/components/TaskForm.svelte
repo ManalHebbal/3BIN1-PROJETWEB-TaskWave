@@ -4,13 +4,13 @@
 
   export let selectedDate = ""; 
   export let task = null; 
-  export let onClose; // Fonction pour fermer la modal
+  export let onClose; 
 
   
   let title = task ? task.title : "";
   let date = task ? task.start.split("T")[0] : selectedDate || "";
   let time = task && task.start.includes("T") ? task.start.split("T")[1] : "";
-  let priority = task ? task.priority : "normal"; // Définition de la priorité par défaut
+  let priority = task ? task.priority : "normal"; 
 
 
   function handleSubmit() {
@@ -18,13 +18,13 @@
       id: task ? task.id : Date.now().toString(),
       title,
       start: time ? `${date}T${time}` : date,
-      priority, // Ajout de la priorité dans les données de la tâche
+      priority, 
     };
 
     if (task) {
       taskStore.updateTask(taskData);
     } else {
-      // Ajout d'une nouvelle tâche
+     
       taskStore.addTask(taskData);
     }
 

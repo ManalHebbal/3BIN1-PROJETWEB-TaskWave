@@ -1,16 +1,14 @@
 <script>
-  export let event;      // Reçoit l'événement FullCalendar
-  export let onEdit;     // Fonction pour éditer la tâche
-  export let onDelete;   // Fonction pour supprimer la tâche
+  export let event;      
+  export let onEdit;    
+  export let onDelete;  
   
-  // Fonction pour appeler l'édition de la tâche
   function handleEdit() {
-    onEdit(event);  // Appelle la fonction passée en prop
+    onEdit(event);  
   }
 
-  // Fonction pour appeler la suppression de la tâche
   function handleDelete() {
-    onDelete(event);  // Appelle la fonction passée en prop
+    onDelete(event);  
   }
 </script>
 
@@ -19,7 +17,6 @@
     {event.title}
   </div>
   
-  <!-- Boutons pour éditer et supprimer -->
   <button class="edit-button" on:click={handleEdit}>✏️</button>
   <button class="delete-button" on:click={handleDelete}>🗑️</button>
 </div>
@@ -29,12 +26,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;  /* Augmenter le padding pour plus d'espace */
+  padding: 10px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
-  width: 100%;  /* Assurer que ça prend toute la largeur disponible */
-  height: 40px; /* Ajuster la hauteur de la tâche */
+  width: 100%;  
+  height: 40px; 
 }
 
 .task-title {

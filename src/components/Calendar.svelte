@@ -95,7 +95,7 @@
         headerToolbar: {
           left: "prev,next today",
           center: "title",
-          right: "filterButton" // Bouton personnalisé pour le filtrage
+          right: "filterButton" 
         },
         customButtons: {
           filterButton: {
@@ -108,10 +108,8 @@
         },
         eventContent: function(arg) {
     
-            // Création du conteneur principal
             const container = document.createElement('div');
             
-            // Insertion de HTML dans le conteneur avec les éléments et classes nécessaires
             container.innerHTML = 
               `<div class="tasktitle">${arg.event.title}</div>
               <button class="edit-button">✏️</button>
@@ -123,16 +121,14 @@
             
             const titleEl= container.querySelector('.tasktitle');
 
-            // Application des styles directement en JavaScript
-            titleEl.style.fontFamily = '"Montserrat", sans-serif;'; // Remplacez par la police que vous avez choisie
-            titleEl.style.fontSize = '19px'; // Ajustez la taille
-            titleEl.style.fontWeight = '1'; // Optionnel : définit l
+            titleEl.style.fontFamily = '"Montserrat", sans-serif;'; 
+            titleEl.style.fontSize = '19px';
+            titleEl.style.fontWeight = '1';
             
             
             
             editButton.style.marginLeft = '80px';
 
-            // Styles appliqués directement en JavaScript pour éviter l'erreur Svelte
             [editButton, deleteButton].forEach(button => {
               button.style.background = 'transparent';
               button.style.border = 'none';
@@ -153,7 +149,6 @@
             });
 
 
-            // Ajout des événements avec Svelte pour déclencher les fonctions de gestion des tâches
             editButton.addEventListener('click', (e) => {
               e.stopPropagation();
               handleEditTask(arg.event);
@@ -180,10 +175,8 @@
 </script>
 
 <div class="calendar-container">
-  <!-- Élément du calendrier -->
   <div bind:this={calendarEl} class="calendar-content"></div>
 
-  <!-- Menu de filtrage des priorités -->
   {#if showFilterMenu}
     <div class="filter-options">
       <button on:click={() => setFilter('high')}>Haute priorité</button>
@@ -194,7 +187,6 @@
   {/if}
 </div>
 
-<!-- Modale pour ajouter ou modifier les tâches -->
 {#if showModal}
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div class="modal-overlay" on:click={closeModal}>
@@ -216,7 +208,7 @@
 
   .filter-options {
     position: absolute;
-    top: 60px; /* Ajustez selon la position du bouton */
+    top: 60px;
     right: px;
     left: 90%;
     background: white;
