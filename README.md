@@ -5,6 +5,7 @@ Le but de cette application est de fournir aux utilisateurs une solution simple 
 
 
 **🚀 Installation et Lancement du projet**
+
 Cloner le dépôt :
 git clone https://github.com/ManalHebbal/3BIN1-PROJETWEB-TaskWave.git
 
@@ -17,4 +18,5 @@ npm run dev
 
 
 **🌐 Type d'Architecture Web**
+
 Le type d'architecture choisi pour l'application est le Single Page Application (SPA) qui utilise le Client Side Rendering(CSR) pour une fournir une expérience utilisateur fluide et réative.
